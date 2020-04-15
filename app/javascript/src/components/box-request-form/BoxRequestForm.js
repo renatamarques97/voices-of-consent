@@ -4,8 +4,10 @@ import PropTypes from 'prop-types'
 import { Progress } from 'react-sweet-progress';
 import 'react-sweet-progress/lib/style.css';
 
-import TextInput from './text-input'
-import './BoxRequestForm.scss'
+import TextInput from './text-input';
+import FollowingQuestion from "./FollowingQuestion";
+
+import './BoxRequestForm.scss';
 
 class BoxRequestForm extends React.Component {
   constructor(props) {
@@ -188,7 +190,7 @@ class BoxRequestForm extends React.Component {
 
   renderRequiredAlert() {
     return (
-      <div class="row alert alert-danger required-field" role="alert">
+      <div className="row alert alert-danger required-field" role="alert">
         This field is required.
       </div>
     );
@@ -196,7 +198,7 @@ class BoxRequestForm extends React.Component {
 
   renderMissingFieldsAlert() {
     return (
-      <div class="alert alert-danger required-fields-submit-alert" role="alert">
+      <div className="alert alert-danger required-fields-submit-alert" role="alert">
         Please fill out all the required fields.
       </div>
     );
@@ -204,17 +206,17 @@ class BoxRequestForm extends React.Component {
 
   renderValidEmailAlert() {
     return (
-      <div class="alert alert-danger required-fields-submit-alert" role="alert">
+      <div className="alert alert-danger required-fields-submit-alert" role="alert">
         Please provide a valid email.
       </div>
     );
   }
 
   renderAbuseTypes() {
-    const abuseTypes = this.state.abuseTypeOptions.map((type) =>
-      <div class="row form-check">
-        <input class="form-check-input" type="checkbox" value={type} id={type} onChange={this.handleCheckBoxChange} checked={this.state.boxRequest.abuse_types.includes(type)} />
-        <label class="form-check-label" for={type}>{type}</label>
+    const abuseTypes = this.state.abuseTypeOptions.map((type, index) =>
+      <div className="row form-check" key={index}>
+        <input className="form-check-input" type="checkbox" value={type} id={type} onChange={this.handleCheckBoxChange} checked={this.state.boxRequest.abuse_types.includes(type)} />
+        <label className="form-check-label" htmlFor={type}>{type}</label>
       </div>
     );
 
@@ -225,50 +227,48 @@ class BoxRequestForm extends React.Component {
     const { boxRequest } = this.state;
     return (
       <div>
-        <div class="row section-top section-label">Name*</div>
+        <div className="row section-top section-label">Name*</div>
         { this.state.attemptedSubmit && (boxRequest.first_name == '' || boxRequest.last_name == '') ? this.renderRequiredAlert() : null }
-        <div class="row">
-          <div class="col-md">
-            <input type="text" class="row form-control" name="first_name" value={boxRequest.first_name} onChange={this.handleChange} />
-            <label class="row sub-text">First Name</label>
+        <div className="row">
+          <div className="col-md">
+            <input type="text" className="row form-control" name="first_name" value={boxRequest.first_name} onChange={this.handleChange} />
+            <label className="row sub-text">First Name</label>
           </div>
-          <div class="col-md">
-            <input type="text" class="row form-control" name="last_name" value={boxRequest.last_name} onChange={this.handleChange} />
-            <label class="row sub-text">Last Name</label>
+          <div className="col-md">
+            <input type="text" className="row form-control" name="last_name" value={boxRequest.last_name} onChange={this.handleChange} />
+            <label className="row sub-text">Last Name</label>
           </div>
         </div>
-        <div class="row section-top">
-          <label class="section-label">Email Address*</label>
-          <input type="text" class="form-control" name="email" value={boxRequest.email} onChange={this.handleChange} />
+        <div className="row section-top">
+          <label className="section-label">Email Address*</label>
+          <input type="text" className="form-control" name="email" value={boxRequest.email} onChange={this.handleChange} />
         </div>
         { this.state.attemptedSubmit && boxRequest.email == '' ? this.renderRequiredAlert() : null }
         { this.state.attemptedSubmit && this.state.error == true ? this.renderValidEmailAlert() : null }
-        <div class="row">
-          <label class="following-question">Okay to email?*</label>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="ok_to_email" id="ok_to_email_true" onChange={this.handleRadioChange} checked={boxRequest.ok_to_email} />
-            <label class="form-check-label" for="ok_to_email">Yes</label>
-          </div>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="ok_to_email" id="ok_to_email_false" onChange={this.handleRadioChange} checked={boxRequest.ok_to_email === false}/>
-            <label class="form-check-label" for="ok_to_email_false">No</label>
-          </div>
+        <div className="row">
+          <FollowingQuestion
+            question="Okay to email?"
+            required={true}
+            onChange={this.handleRadioChange}
+            fieldName="ok_to_email"
+            value={boxRequest.ok_to_email}
+          />
         </div>
         { this.state.attemptedSubmit && boxRequest.ok_to_email == null ? this.renderRequiredAlert() : null }
 
-        <label class="row section-top">Type(s) of abuse you have faced*</label>
+        <label className="row section-top">Type(s) of abuse you have faced*</label>
         { this.state.attemptedSubmit && boxRequest.abuse_types.length === 0 ? this.renderRequiredAlert() : null }
         { this.renderAbuseTypes() }
 
-        <div class="row section-top" >
+        <div className="row section-top" >
           <label>Briefly describe your current situation. Is the abuse current? Do you live with your abuser? Do you have kids affected by the abuse?*</label>
-          <textarea type="text" class="form-control" name="question_re_current_situation" value={boxRequest.question_re_current_situation} onChange={this.handleChange} />
+          <textarea type="text" className="form-control" name="question_re_current_situation" value={boxRequest.question_re_current_situation} onChange={this.handleChange} />
         </div>
         { this.state.attemptedSubmit && boxRequest.question_re_current_situation == '' ? this.renderRequiredAlert() : null }
 
-        <div class="row section-top">
+        <div className="row section-top">
           <label>How did this abuse affect your life?*</label>
-          <textarea type="text" class="form-control" name="question_re_affect" value={boxRequest.question_re_affect} onChange={this.handleChange} />
+          <textarea type="text" className="form-control" name="question_re_affect" value={boxRequest.question_re_affect} onChange={this.handleChange} />
         </div>
         { this.state.attemptedSubmit && boxRequest.question_re_affect == '' ? this.renderRequiredAlert() : null }
       </div>
@@ -279,72 +279,61 @@ class BoxRequestForm extends React.Component {
     const { boxRequest } = this.state;
     return (
       <div>
-        <label class="row section-top">Do you feel safe now?*</label>
-        { this.state.attemptedSubmit && boxRequest.is_safe == null ? this.renderRequiredAlert() : null }
-        <div class="row">
-          <div class="custom-control custom-radio custom-control-inline">
-            <input type="radio" id="is_safe_true" name="is_safe" class="custom-control-input" onChange={this.handleRadioChange} checked={boxRequest.is_safe}/>
-            <label class="custom-control-label radio-box" for="is_safe_true">Yes</label>
-          </div>
-        </div>
-        <div class="row">
-          <div class="custom-control custom-radio custom-control-inline">
-            <input type="radio" id="is_safe_false" name="is_safe" class="custom-control-input" onChange={this.handleRadioChange} checked={boxRequest.is_safe === false}/>
-            <label class="custom-control-label radio-box" for="is_safe_false">No</label>
-          </div>
-        </div>
+        <FollowingQuestion
+          question="Do you feel safe now?"
+          required={true}
+          onChange={this.handleRadioChange}
+          fieldName="is_safe"
+          value={boxRequest.is_safe}
+          className="row section-top"
+        >
+          { this.state.attemptedSubmit && boxRequest.is_safe == null ? this.renderRequiredAlert() : null }
+        </FollowingQuestion>
 
-        <label class="row section-top">Are you interested in learning about free counseling services?*</label>
-        { this.state.attemptedSubmit && boxRequest.is_interested_in_counseling_services == null ? this.renderRequiredAlert() : null }
-        <div class="row">
-          <div class="custom-control custom-radio custom-control-inline">
-            <input type="radio" id="is_interested_in_counseling_services_true" name="is_interested_in_counseling_services" class="custom-control-input" onChange={this.handleRadioChange} checked={boxRequest.is_interested_in_counseling_services} />
-            <label class="custom-control-label radio-box" for="is_interested_in_counseling_services_true">Yes</label>
-          </div>
-        </div>
-        <div class="row">
-          <div class="custom-control custom-radio custom-control-inline">
-            <input type="radio" id="is_interested_in_counseling_services_false" name="is_interested_in_counseling_services" class="custom-control-input" onChange={this.handleRadioChange} checked={boxRequest.is_interested_in_counseling_services === false}/>
-            <label class="custom-control-label radio-box" for="is_interested_in_counseling_services_false">No</label>
-          </div>
-        </div>
+        <FollowingQuestion
+          question="Are you interested in learning about free counseling services?"
+          required={true}
+          onChange={this.handleRadioChange}
+          fieldName="is_interested_in_counseling_services"
+          value={boxRequest.is_interested_in_counseling_services}
+          className="row section-top"
+        >
+          { this.state.attemptedSubmit && boxRequest.is_interested_in_counseling_services == null ? this.renderRequiredAlert() : null }
+        </FollowingQuestion>
 
-        <label class="row section-top">Are you interested in learning about free health services?*</label>
+        <FollowingQuestion
+          question="Are you interested in learning about free health services?"
+          required={true}
+          onChange={this.handleRadioChange}
+          fieldName="is_interested_in_health_services"
+          value={boxRequest.is_interested_in_health_services}
+          className="row section-top"
+        >
           { this.state.attemptedSubmit && boxRequest.is_interested_in_health_services == null ? this.renderRequiredAlert() : null }
-          <div class="row">
-            <div class="custom-control custom-radio custom-control-inline">
-              <input type="radio" id="is_interested_in_health_services_true" name="is_interested_in_health_services" class="custom-control-input" onChange={this.handleRadioChange} checked={boxRequest.is_interested_in_health_services} />
-              <label class="custom-control-label radio-box" for="is_interested_in_health_services_true">Yes</label>
-            </div>
-          </div>
-          <div class="row">
-            <div class="custom-control custom-radio custom-control-inline">
-              <input type="radio" id="is_interested_in_health_services_false" name="is_interested_in_health_services" class="custom-control-input" onChange={this.handleRadioChange} checked={boxRequest.is_interested_in_health_services === false} />
-              <label class="custom-control-label radio-box" for="is_interested_in_health_services_false">No</label>
-            </div>
-          </div>
+        </FollowingQuestion>
 
-          <label class="row section-top">What is is your age?*</label>
+        <FollowingQuestion
+          question="What is your age?"
+          required={true}
+          onChange={this.handleRadioChange}
+          fieldName="is_underage"
+          value={boxRequest.is_under_age}
+          options={{ true: { label: "0-12 years old" }, false: { label: "13+ years old" } }}
+          className="row section-top"
+        >
           { this.state.attemptedSubmit && boxRequest.is_underage == null ? this.renderRequiredAlert() : null }
-          <div class="row">
-            <div class="custom-control custom-radio custom-control-inline">
-              <input type="radio" id="is_underage_true" name="is_underage" class="custom-control-input" onChange={this.handleRadioChange} checked={boxRequest.is_underage} />
-              <label class="custom-control-label radio-box" for="is_underage_true">0-12 years old</label>
-            </div>
-          </div>
-          <div class="row">
-            <div class="custom-control custom-radio custom-control-inline">
-              <input type="radio" id="is_underage_false" name="is_underage" class="custom-control-input" onChange={this.handleRadioChange} checked={boxRequest.is_underage === false}/>
-              <label class="custom-control-label radio-box" for="is_underage_false">13+ years old</label>
-            </div>
-          </div>
+        </FollowingQuestion>
 
-          <div class="row section-top">
-            <label>How did you hear about us?*</label>
-            { this.state.attemptedSubmit && boxRequest.question_re_referral_source == null ? this.renderRequiredAlert() : null }
-            <input type="text" class="form-control" name="question_re_referral_source" value={boxRequest.question_re_referral_source} onChange={this.handleChange} />
-          </div>
-          { this.state.attemptedSubmit && boxRequest.question_re_referral_source == '' ? this.renderRequiredAlert() : null }
+        <TextInput
+          containerClass=""
+          inputContainerClass="section-top"
+          name="question_re_referral_source"
+          value={boxRequest.question_re_referral_source}
+          onChange={this.handleChange}
+          label="How did you hear about us?*"
+          labelPosition="top"
+        />
+        { this.state.attemptedSubmit && boxRequest.question_re_referral_source ? this.renderRequiredAlert() : null }
       </div>
     );
   }
@@ -353,90 +342,104 @@ class BoxRequestForm extends React.Component {
     const { boxRequest } = this.state;
     return (
       <div>
-        <div class="row section-top section-label">Address*</div>
+        <div className="row section-top section-label">Address*</div>
         { this.state.attemptedSubmit && (boxRequest.street_address === '' || boxRequest.city === '' || boxRequest.state === '' || boxRequest.zip === '') ? this.renderRequiredAlert() : null }
-        <div class="row sub-text">
-          <input type="text" class="form-control" name="street_address" value={boxRequest.street_address} onChange={this.handleChange} />
-          <label>Address 1</label>
+        <TextInput
+          containerClass=""
+          inputContainerClass="sub-text"
+          name="street_address"
+          value={boxRequest.street_address}
+          onChange={this.handleChange}
+          labelContainerClass="sub-text"
+          label="Address 1"
+        />
+        <div className="row">
+          <TextInput
+            containerClass="col-9"
+            inputContainerClass="sub-text"
+            name="city"
+            value={boxRequest.city}
+            onChange={this.handleChange}
+            labelContainerClass="sub-text"
+            label="City"
+          />
+          <TextInput
+            containerClass="col-3"
+            inputContainerClass="sub-text"
+            name="state"
+            value={boxRequest.state}
+            onChange={this.handleChange}
+            labelContainerClass="sub-text"
+            label="State"
+          />
         </div>
-        <div class="row">
-          <div class="col-9">
-            <div class="row sub-text">
-              <input type="text" class="form-control" name="city" value={boxRequest.city} onChange={this.handleChange} />
-            </div>
-            <label><div class="row sub-text">City</div></label>
-          </div>
-          <div class="col-3">
-            <div class="row sub-text">
-              <input type="text" class="form-control" name="state" value={boxRequest.state} onChange={this.handleChange} />
-            </div>
-            <label><div class="row sub-text">State</div></label>
-          </div>
+        <div className="row">
+          <TextInput
+            containerClass="col-md"
+            name="zip"
+            value={boxRequest.zip}
+            onChange={this.handleChange}
+            labelContainerClass="sub-text"
+            label="Zip Code"
+          />
+          <TextInput
+            containerClass="col-md"
+            name="county"
+            value={boxRequest.county}
+            onChange={this.handleChange}
+            labelContainerClass="sub-text"
+            label="County"
+          />
         </div>
-        <div class="row">
-          <div class="col-md">
-            <div class="row">
-              <input type="text" class="form-control" name="zip" value={boxRequest.zip} onChange={this.handleChange} />
-            </div>
-            <label><div class="row sub-text">Zip Code</div></label>
-          </div>
-          <div class="col-md">
-            <div class="row">
-              <input type="text" class="form-control" name="county" value={boxRequest.county} onChange={this.handleChange} />
-            </div>
-            <label><div class="row sub-text">County</div></label>
-          </div>
-        </div>
-        <div class="row">
-          <label class="following-question">Okay to mail?*</label>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="ok_to_mail" id="ok_to_mail_true" onChange={this.handleRadioChange} checked={boxRequest.ok_to_mail} />
-            <label class="form-check-label" for="ok_to_mail">Yes</label>
-          </div>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="ok_to_mail" id="ok_to_mail_false" onChange={this.handleRadioChange} checked={boxRequest.ok_to_mail === false} />
-            <label class="form-check-label" for="ok_to_mail_false">No</label>
-          </div>
+        <div className="row">
+          <FollowingQuestion
+            question="Okay to mail?"
+            required={true}
+            onChange={this.handleRadioChange}
+            fieldName="ok_to_mail"
+            value={boxRequest.ok_to_mail}
+          />
         </div>
         { this.state.attemptedSubmit && boxRequest.ok_to_mail == null ? this.renderRequiredAlert() : null }
 
-        <div class="row section-top">
-          <label class="section-label">Phone</label>
-          <input type="text" class="form-control" name="phone" value={boxRequest.phone} onChange={this.handleChange} />
-          <div class="col-6">
-            <div class="row">
-              <label class="following-question">Okay to call?*</label>
-              <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="ok_to_call" id="ok_to_call_true" onChange={this.handleRadioChange} checked={boxRequest.ok_to_call}/>
-                <label class="form-check-label" for="ok_to_call">Yes</label>
-              </div>
-
-              <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="ok_to_call" id="ok_to_call_false" onChange={this.handleRadioChange} checked={boxRequest.ok_to_call === false}/>
-                <label class="form-check-label" for="ok_to_call_false">No</label>
-              </div>
+        <div className="row section-top">
+          <label className="section-label">Phone</label>
+          <input type="text" className="form-control" name="phone" value={boxRequest.phone} onChange={this.handleChange} />
+          <div className="col-6">
+            <div className="row">
+              <FollowingQuestion
+                question="Okay to call?"
+                required={true}
+                onChange={this.handleRadioChange}
+                fieldName="ok_to_call"
+                value={boxRequest.ok_to_call}
+              />
             </div>
           </div>
-          <div class="col-6">
-            <div class="row">
-              <label class="following-question">Okay to text?*</label>
-              <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="ok_to_text" id="ok_to_text_true" onChange={this.handleRadioChange} checked={boxRequest.ok_to_text} />
-                <label class="form-check-label" for="ok_to_text_true">Yes</label>
-              </div>
-              <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="ok_to_text" id="ok_to_text_false" onChange={this.handleRadioChange} checked={boxRequest.ok_to_text === false} />
-                <label class="form-check-label" for="ok_to_text_false">No</label>
-              </div>
+          <div className="col-6">
+            <div className="row">
+              <FollowingQuestion
+                question="Okay to text?"
+                required={true}
+                onChange={this.handleRadioChange}
+                fieldName="ok_to_text"
+                value={boxRequest.ok_to_text}
+              />
             </div>
           </div>
         </div>
+
         { this.state.attemptedSubmit && boxRequest.phone != '' && (boxRequest.ok_to_text == null || boxRequest.ok_to_call == null) ? this.renderRequiredAlert() : null }
 
-        <div class="row section-top">
-          <label>Are you requesting this box for someone else? If so, please briefly explain. </label>
-          <input type="text" class="form-control" name="question_re_if_not_self_completed" value={boxRequest.question_re_if_not_self_completed} onChange={this.handleChange} />
-        </div>
+        <TextInput
+          containerClass=""
+          inputContainerClass="section-top"
+          name="question_re_if_not_self_completed"
+          value={boxRequest.question_re_if_not_self_completed}
+          onChange={this.handleChange}
+          label="Are you requesting this box for someone else? If so, please briefly explain."
+          labelPosition="top"
+        />
       </div>
     );
   }
@@ -460,18 +463,18 @@ class BoxRequestForm extends React.Component {
     const currentStep = this.state.step;
     return (
       <div>
-        <nav class="form-pagination row">
-          <ul class="pagination">
-            <li class={currentStep == 0 ? "page-item disabled" : "page-item"} onClick={this.handlePaginatePrevious}>
-              <span class="page-link">Previous</span>
+        <nav className="form-pagination row">
+          <ul className="pagination">
+            <li className={currentStep == 0 ? "page-item disabled" : "page-item"} onClick={this.handlePaginatePrevious}>
+              <span className="page-link">Previous</span>
             </li>
-            <li class={currentStep == 0 ? "page-item active" : "page-item"} onClick={() => this.setState({step: 0})}><a class="page-link">1</a></li>
-            <li class={currentStep == 1 ? "page-item active" : "page-item"} onClick={() => this.setState({step: 1})}>
-              <a class="page-link"> 2 </a>
+            <li className={currentStep == 0 ? "page-item active" : "page-item"} onClick={() => this.setState({step: 0})}><a className="page-link">1</a></li>
+            <li className={currentStep == 1 ? "page-item active" : "page-item"} onClick={() => this.setState({step: 1})}>
+              <a className="page-link"> 2 </a>
             </li>
-            <li class={currentStep == 2 ? "page-item active" : "page-item"} onClick={() => this.setState({step: 2})}><a class="page-link">3</a></li>
-            <li class={currentStep == 2 ? "page-item disabled" : "page-item"} onClick={this.handlePaginateForward}>
-              <span class="page-link">Next</span>
+            <li className={currentStep == 2 ? "page-item active" : "page-item"} onClick={() => this.setState({step: 2})}><a className="page-link">3</a></li>
+            <li className={currentStep == 2 ? "page-item disabled" : "page-item"} onClick={this.handlePaginateForward}>
+              <span className="page-link">Next</span>
             </li>
           </ul>
         </nav>
@@ -484,19 +487,19 @@ class BoxRequestForm extends React.Component {
     const { boxRequest } = this.state;
 
     return (
-      <div class="outreach-form-container">
-        <div class="form-info">If you are interested in receiving a survivor box, please fill out this quick form below.
+      <div className="outreach-form-container">
+        <div className="form-info">If you are interested in receiving a survivor box, please fill out this quick form below.
           The more information you provide us with, the better we can help you.
           All information provided is 100% confidential and only seen by the leaders of our team.
           The return rate of our survivor boxes is 2-3 weeks due to high demand.
         </div>
-        <form onSubmit={this.handleSubmit} style={{'border-top': '2px dotted gray'}}>
+        <form onSubmit={this.handleSubmit} style={{'borderTop': '2px dotted gray'}}>
           { this.state.step === 0 && this.renderTopSection() }
           { this.state.step === 1 && this.renderMiddleSection() }
           { this.state.step === 2 && this.renderFinalSection() }
           { this.renderPaginationAndProgressBar() }
           { this.state.attemptedSubmit && this.missingRequiredFields() ? this.renderMissingFieldsAlert() : null }
-          <input type="submit" value="SUBMIT - SEND ME A SURVIVOR BOX" class={this.missingRequiredFields() ? "gray-submit" : null}/>
+          <input type="submit" value="SUBMIT - SEND ME A SURVIVOR BOX" className={this.missingRequiredFields() ? "gray-submit" : null}/>
         </form>
       </div>
     );
