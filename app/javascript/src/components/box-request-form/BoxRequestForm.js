@@ -317,7 +317,7 @@ class BoxRequestForm extends React.Component {
           required={true}
           onChange={this.handleRadioChange}
           fieldName="is_underage"
-          value={boxRequest.is_under_age}
+          value={boxRequest.is_underage}
           options={{ true: { label: "0-12 years old" }, false: { label: "13+ years old" } }}
           className="row section-top"
         >
